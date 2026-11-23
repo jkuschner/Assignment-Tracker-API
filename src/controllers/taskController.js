@@ -7,6 +7,7 @@ export const createTask = async (req, res) => {
         const { title, description, status, difficulty, dueDate } = req.body;
 
         const task = await Task.create({
+            user_id: req.user._id,
             title,
             description,
             status,
@@ -30,7 +31,7 @@ export const createTask = async (req, res) => {
 // Get all tasks
 export const getTasks = async (req, res) => {
     try {
-        const tasks = await Task.find().sort({ createdAt: -1 });
+        const tasks = await Task.find({ user_id: req.user._id }).sort({ createdAt: -1 });
 
         res.status(200).json({
             success: true,
@@ -76,7 +77,7 @@ export const updateTask = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Task not found' });
         }
 
-        if (task.user_id.toString() !== req.user_id.toString()) {
+        if (task.user_id.toString() !== req.user._id.toString()) {
             return res.status(403).json({ success: false, message: 'Not authorized to modify this task' });
         }
 
