@@ -40,3 +40,21 @@ export const createCourse = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
+// Get all courses
+// GET /api/courses
+export const getCourses = async (req, res) => {
+    try {
+        const courses = await Course.find()
+            .populate('instructor_id', 'name email')
+            .sort({ course_code: 1 });
+
+        res.status(200).json({
+            success: true,
+            count: courses.length,
+            data: courses,
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
