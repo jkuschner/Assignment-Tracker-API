@@ -33,7 +33,7 @@ export const getHolidays = async (req, res) => {
     }
 };
 
-// Check if an assignment is on a holiday
+// Check if a particular date is on a holiday
 // GET /api/calendar/check-date
 export const checkDateForHoliday = async (req, res) => {
     try {

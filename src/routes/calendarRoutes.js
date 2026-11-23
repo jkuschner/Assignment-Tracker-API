@@ -1,0 +1,12 @@
+import express from 'express';
+import { getHolidays, checkDateForHoliday } from '../controllers/calendarController.js';
+import { protect } from '../middleware/authMiddleware.js';
+
+const router = express.Router();
+
+router.use(protect);
+
+router.get('/holidays', getHolidays);
+router.get('/check-date', checkDateForHoliday);
+
+export default router;
