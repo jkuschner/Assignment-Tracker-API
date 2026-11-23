@@ -38,6 +38,12 @@ const taskSchema = new mongoose.Schema(
             type: Date,
             default: null,
         },
+        subtasks: [
+            {
+                title: { type: String, required: true },
+                completed: {type: Boolean, default: false },
+            },
+        ],
     },
     {
         timestamps: true

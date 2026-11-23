@@ -6,6 +6,7 @@ import {
     updateTask,
     deleteTask,
 } from '../controllers/taskController.js';
+import { generateStudyPlan } from '../controllers/aiController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -20,5 +21,7 @@ router.route('/:id')
     .get(getTaskById)
     .put(updateTask)
     .delete(deleteTask);
+
+router.post('/:id/ai-breakdown', generateStudyPlan);
 
 export default router;
