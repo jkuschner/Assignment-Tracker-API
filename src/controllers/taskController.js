@@ -65,3 +65,54 @@ export const getTaskById = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
+// Update task
+// PUT /api/tasks/:id
+export const updateTask = async (req, res) => {
+    try {
+        let task = await Task.findById(req.params.id);
+
+        if (!task) {
+            return res.status(400).json({ success: false, message: 'Task not found' });
+        }
+
+        if (task.user_id.toString() !== req.user_id.toString()) {
+            return res.status(403).json({ success: false, message: 'Not authorized to modify this task' });
+        }
+
+        task = await Task.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true,
+        });
+
+        res.status(200).json({ success: true, data: task });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+};
+
+// Delete task
+// DELETE /api/tasks/:id
+export const deleteTask = async (req, res) => {
+    try {
+        const task = await Task.findById(req.params.id);
+
+        if (!task) {
+            return res.status(404).json({ success: false, message: 'Task not found' });
+        }
+
+        if (task.user_id.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ success: false, message: 'Not authorized to delete this task' });
+        }
+
+        await task.deleteOne();
+
+        res.status(200).json({
+            success: true,
+            message: 'Task successfully deleted',
+            data: {},
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
